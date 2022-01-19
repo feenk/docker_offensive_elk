@@ -4,5 +4,5 @@
 .DS_Store
 
 # Folders
-_data/elasticsearch/
-_data/nmap/*.xml
+_data/
+venv/

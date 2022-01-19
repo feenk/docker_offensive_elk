@@ -1,6 +1,15 @@
-version: '2'
+#version: '2'
+version: '3.3'
 
 services:
+    # ------------------------------------------------------------------------------------
+    # CREATE_CERTS
+    # ------------------------------------------------------------------------------------
+    #create_certs:
+    #    container_name: elk_certs
+    #    build: certs/
+    #    volumes:
+    #        - ./certs:/usr/share/elasticsearch/config/certificates
     # ------------------------------------------------------------------------------------
     # ELASTICSEARCH
     # ------------------------------------------------------------------------------------
@@ -11,6 +20,7 @@ services:
         volumes:
             - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
             - ./_data/elasticsearch:/usr/share/elasticsearch/data
+              #- ./certs:/usr/share/elasticsearch/config/certificates
         ports:
             - "9200:9200"
             - "9300:9300"
@@ -18,6 +28,8 @@ services:
             ES_JAVA_OPTS: "-Xmx256m -Xms256m"
         networks:
             - elk
+              #depends_on: 
+              #- create_certs
 
     # ------------------------------------------------------------------------------------
     # LOGSTASH
@@ -29,6 +41,7 @@ services:
         volumes:
             - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
             - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+            - ./logstash/load:/usr/share/logstash/load:ro
         ports:
             - "5000:5000"
         environment:
